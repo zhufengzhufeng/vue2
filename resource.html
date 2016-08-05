@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/bootstrap/dist/css/bootstrap.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="container">
+<table class="table table-responsive">
+    <tr>
+        <td>书的名字</td>
+        <td>书的价格</td>
+        <td colspan="2">操作</td>
+    </tr>
+    <tr v-for="book in books">
+        <td>{{book.name}}</td>
+        <td>{{book.price}}</td>
+        <td><button class="btn btn-danger" @click="delete(book)">删除</button></td>
+        <td><!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" @click="update(book)">
+               修改
+            </button></td>
+    </tr>
+</table>
+
+
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                </div>
+                <div class="modal-body">
+                    书名 <input type="text" v-model="book.name">
+                    价格 <input type="text" v-model="book.price">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" @click="modify">确定修改</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/vue/dist/vue.js"></script>
+<script src="/vue-resource/dist/vue-resource.js"></script>
+<script src="/jquery/dist/jquery.js"></script>
+<script src="/bootstrap/dist/js/bootstrap.js"></script>
+<script>
+    var vm  = new Vue({
+        el:".container",
+        data:{
+            books:[],
+            book:{
+                name:'',
+                price:''
+            }
+        },
+        ready(){
+            //在实例上声明了一个resouce
+            this.resouce = this.$resource('/books{/id}');
+            this.resouce.get().then((data)=>{
+                //当前data是字符串类型的 转换成json
+                this.books = data.json();
+            });
+        },
+        methods:{
+            delete(book){
+                //删除书
+                this.resouce.delete({id:book.id}).then((data)=>{
+                    //当前data是字符串类型的 转换成json
+                    this.books = data.json();
+                });
+            },
+            update(book){
+                //操作的是同一个数据
+                this.book = JSON.parse(JSON.stringify(book));
+            },
+            modify(){
+                this.resouce.update({id:this.book.id},{data:this.book}).then((data)=>{
+                    //当前data是字符串类型的 转换成json
+                    this.books = data.json();
+                    $('.modal').modal('toggle')
+                });
+            }
+        }
+    })
+
+
+
+
+</script>
+</body>
+</html>

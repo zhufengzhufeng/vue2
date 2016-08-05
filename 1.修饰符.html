@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    <!--限制将事件绑定到自己身上，自事件冒泡也不会触发-->
+    <div @click.self="parent">
+        parent
+        <div>middle</div>
+        <!--组织事件传播<div @click.stop="child(1)">child</div>-->
+        <div @click="child(1)">child</div>
+    </div>
+    <a href="http://www.baidu.com" @click.prevent>goBD</a>
+
+    <!--支持常用的按键修饰符和单字母修饰符-->
+    <input type="text" @keyup.F1="parent">
+</div>
+<script src="node_modules/vue/dist/vue.js"></script>
+<script>
+    //可以扩展指令达到自定义的效果
+//   Vue.directive('on').keyCodes.F1 = 112;
+    var vm = new Vue({
+        el:'#app',
+        methods:{
+            parent(){
+                alert('父亲')
+            },
+            child(e){
+                //手动传入$events
+                alert('孩子');
+               // e.stopPropagation()
+            }
+        }
+    })
+</script>
+</body>
+</html>

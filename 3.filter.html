@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    {{"hello world" | capitalize 2}}
+    {{"hello world" | uppercase}}
+    {{"HELLO world" | lowercase}}
+    {{139.213111 | currency '英镑' 3}}
+    <!--单数 复数  如果是是1 都是单数除了1都是复数-->
+    {{water | pluralize 'item'}}
+    <!--如果不存在的都是最后一个-->
+    7{{9 | pluralize 'item1' 'item2' 'item3' 'item4' 'item5' 'item6' 'item7' 'item8'}}
+    
+    <pre>{{message| json 4}}
+    </pre>
+    <!--延迟事件触发-->
+    <input type="text" @keyup="make | debounce 1000">
+    <!--limitby 限制条数 和从第几条开始显示-->
+    <button @click="count+=2"></button>
+    <!--<div v-for="arr in arr1 | limitBy 2 count">
+        {{arr.name}}
+    </div>-->
+    <!--默认从全部中进行筛选-->
+    <!--<div v-for="arr in arr1 | filterBy 'zfpx1'">
+        {{arr.name}} {{arr.age}}
+    </div>-->
+    <!--默认从全部中进行筛选{name:'zfpx1'} 可节省性能-->
+    <!--<div v-for="arr in arr1 | filterBy 'zfpx1' in 'name'">
+        {{arr.name}} {{arr.age}}
+    </div>-->
+    <button @click="order*=-1"></button>
+    <div v-for="arr in arr1 | orderBy 'name' order ">
+        {{arr.name}}
+    </div>
+    <!--读取过滤-->
+    <!--<input type="text" v-model="cur | currency '英镑' 1">
+    {{cur}}-->
+    <input type="text" v-model="cur | my">
+    {{cur}}
+</div>
+<script src="node_modules/vue/dist/vue.js"></script>
+<script>
+    //自定义过滤器,可以改变原有的filter
+    Vue.filter('capitalize',function (value,begin,end) {
+        return value.slice(0,begin).toUpperCase()+value.slice(begin)
+    });
+    Vue.filter('my',{
+        write(val){ //默认我们写入时要进行过滤的,对数据进行写入的修改
+            return val+'zfpx'
+        },
+       /* read(){ //默认写一个函数的时候是读取
+
+        }*/
+    })
+    var vm = new Vue({
+        el:'#app',
+        data:{
+            order:1,
+            cur:'100.10123',
+            message:{name:'zfpx',age:7},
+            arr1:[
+                {name:'zfpx1',age:'zfpx1'},
+                {name:'zfpx2',age:'zfpx1'},
+                {name:'zfpx3',age:8},
+                {name:'zfpx4',age:7},
+                {name:'zfpx5',age:6},
+                {name:'zfpx6',age:2},
+                {name:'zfpx7',age:1},
+                {name:'zfpx8',age:0},
+                {name:'zfpx9',age:9},
+                {name:'zfpx10',age:8},
+            ],
+            count:0
+        },
+        methods:{
+            make(){
+                alert(1)
+            }
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    <!--如果写入的是checkbox 我们需要设定一个数组-->
+    <input type="checkbox" name="group" v-model="checks" value="吃">
+    <input type="checkbox" name="group" v-model="checks" value="喝">
+    <input type="checkbox" name="group" v-model="checks" value="玩">
+    {{checks}}
+
+
+    <input type="radio" v-model="radio" value="男">
+    <input type="radio" v-model="radio" value="女">
+    {{radio}}
+    <!--单选菜单为字符串类型 多选为数组类型-->
+    <select v-model='selects' multiple>
+        <option value="1">你好</option>
+        <option value="2">我好</option>
+        <option value="3">大家好</option>
+    </select>
+    {{selects}}
+    <!--as for in vue只能通过v-for -->
+    <select>
+        <option :value="select.age" v-for="select in selects">{{select.name}}</option>
+    </select>
+    <!--失去焦点时候刷新 {updateOn:'blur'}-->
+    <input type="text" v-model="data" lazy>
+    {{data}}
+    <!--延迟数据刷新-->
+    <input type="text" v-model="data" debounce="2000">
+</div>
+<script src="node_modules/vue/dist/vue.js"></script>
+<script>
+    var vm = new Vue({
+        el:'#app',
+        data:{
+            selects:[
+                {name:'zfpx1',age:7},
+                {name:'zfpx2',age:8},
+                {name:'zfpx3',age:9}
+            ]
+        },
+        methods:{
+
+        }
+    });
+</script>
+</body>
+</html>
